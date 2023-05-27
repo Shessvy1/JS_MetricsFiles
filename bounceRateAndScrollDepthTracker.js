@@ -32,11 +32,21 @@ function globalBounceRate() {
     }, 10000);
 
     // When the user leaves the page, record the end of the session
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            sessionEnd = Date.now();
-        }
-    });
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        sessionEnd = Date.now();
+        // Send the custom event to Optimizely
+        window.optimizely = window.optimizely || [];
+        window.optimizely.push({
+            type: "event",
+            eventName: "bounceRateAndScrollDepth",
+            tags: {
+                sessionLength: getSessionLength(),
+                exitScrollDepth: getExitScrollDepth()
+            }
+        });
+    }
+});
 
     // Function to handle scroll event
     function handleScrollEvent() {
