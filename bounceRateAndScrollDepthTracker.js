@@ -1,3 +1,4 @@
+// Variables that track the session lenght
 let sessionStart;
 let sessionEnd;
 let intervalCount = 0;
