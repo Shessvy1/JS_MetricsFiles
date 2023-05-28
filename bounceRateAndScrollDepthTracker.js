@@ -1,4 +1,3 @@
-// Variables to track session start and end and to switch to eanged users
 let sessionStart;
 let sessionEnd;
 let intervalCount = 0;
@@ -10,6 +9,11 @@ let hasFiredScroll25Event = false;
 let hasFiredScroll50Event = false;
 let hasFiredScroll75Event = false;
 let hasFiredScroll100Event = false;
+
+// Function to get the scroll depth when the user exited the page
+function getExitScrollDepth() {
+    return scrollPercent;
+}
 
 function globalBounceRate() {
     // Record the start of the session
@@ -83,13 +87,14 @@ function globalBounceRate() {
     // Log session start and engaged status
     console.log("Session Start:", sessionStart);
 
-    // Set up an interval to log the screen time every 10 seconds
-    let screenTimeInterval = setInterval(logScreenTime, 10000);
+    // Set up an interval to log the screen time and scroll depth every 10 seconds
+    let logInterval = setInterval(logSessionData, 10000);
 
-    // Function to log the screen time
-    function logScreenTime() {
+    // Function to log the screen time and scroll depth
+    function logSessionData() {
         const screenTime = getSessionLength();
         console.log("Screen Time:", screenTime.toFixed(2) + " seconds");
+        console.log("Scroll Depth:", getExitScrollDepth().toFixed(2) + "%");
     }
 
     // Set up an interval to check if the user is engaged after 60 seconds
@@ -110,9 +115,4 @@ function getSessionLength() {
         const currentSessionLength = (Date.now() - sessionStart) / 1000;
         return currentSessionLength;
     }
-}
-
-// Function to get the scroll depth when the user exited the page
-function getExitScrollDepth() {
-    return scrollPercent;
 }
