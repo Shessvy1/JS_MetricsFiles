@@ -32,21 +32,21 @@ function globalBounceRate() {
     }, 10000);
 
     // When the user leaves the page, record the end of the session
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        sessionEnd = Date.now();
-        // Send the custom event to Optimizely
-        window.optimizely = window.optimizely || [];
-        window.optimizely.push({
-            type: "event",
-            eventName: "bounceRateAndScrollDepth",
-            tags: {
-                sessionLength: getSessionLength(),
-                exitScrollDepth: getExitScrollDepth()
-            }
-        });
-    }
-});
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            sessionEnd = Date.now();
+            // Send the custom event to Optimizely
+            window.optimizely = window.optimizely || [];
+            window.optimizely.push({
+                type: "event",
+                eventName: "bounceRateAndScrollDepth",
+                tags: {
+                    sessionLength: getSessionLength(),
+                    exitScrollDepth: getExitScrollDepth()
+                }
+            });
+        }
+    });
 
     // Function to handle scroll event
     function handleScrollEvent() {
@@ -78,6 +78,10 @@ function globalBounceRate() {
 
     // Add event listener outside the function
     window.addEventListener('scroll', handleScrollEvent);
+
+    // Log session start and engaged status
+    console.log("Session Start:", sessionStart);
+    console.log("User Engaged:", userEngaged);
 }
 
 // Call the function when the page loads
@@ -86,18 +90,5 @@ window.addEventListener('load', globalBounceRate);
 // Function to get the session length in seconds
 function getSessionLength() {
     if (sessionEnd) {
-        return (sessionEnd - sessionStart) / 1000;
-    } else {
-        return (Date.now() - sessionStart) / 1000;
-    }
-}
-
-// Function to check if the user is considered engaged
-function isUserEngaged() {
-    return userEngaged;
-}
-
-// Function to get the scroll depth when the user exited the page
-function getExitScrollDepth() {
-    return scrollPercent;
-}
+        const sessionLength = (sessionEnd - sessionStart) / 1000;
+        console.log("Session Length:", session
